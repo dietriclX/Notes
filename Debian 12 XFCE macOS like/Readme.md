@@ -1,3 +1,5 @@
+_Note: Replace "USERID" by your user-name._
+
 # Dock: [Glx-Dock / Cairo-Dock](https://glx-dock.org/)
 
 
@@ -10,7 +12,7 @@ In the "Einstellungen > Leiste" remove "Leiste 1" (the dock) but keep "Leiste 0"
 Make it general available for all users 
 
 ```console
-mv /home/<USERID>/.config/cairo-dock/themes/MacOSX /usr/share/cairo-dock/themes
+mv /home/USERID/.config/cairo-dock/themes/MacOSX /usr/share/cairo-dock/themes
 chown -R root:root /usr/share/cairo-dock/themes/MacOSX
 chmod -R go-xw /usr/share/cairo-dock/themes/MacOSX	
 find /usr/share/cairo-dock/themes/MacOSX -type d | while read x
@@ -74,7 +76,7 @@ Based on [osXFCE ist ein MacOS-inspiriertes Thema für XFCE, das auf arc-flatabu
 Download "McOS-XFCE-Edition-II-1.tar.xz" and extract it in Download folder.
 
 ```console
-mv /home/<USERID>/Downloads/McOS-XFCE-Edition-II-1 /usr/share/themes/McOS-XFCE-Edition
+mv /home/USERID/Downloads/McOS-XFCE-Edition-II-1 /usr/share/themes/McOS-XFCE-Edition
 chown -R root:root /usr/share/themes/McOS-XFCE-Edition
 chmod -R go-w /usr/share/themes/McOS-XFCE-Edition
 find /usr/share/themes/McOS-XFCE-Edition -type d | while read x
@@ -89,8 +91,8 @@ done
 Download "McOS-CTLina-XFCE-Dark.tar.xz" & "McOS-CTLina-XFCE.tar.xz" and extract them in Download folder.
 
 ```console
-mv /home/<USERID>/Downloads/McOS-CTLina-XFCE /usr/share/themes
-mv /home/<USERID>/Downloads/McOS-CTLina-XFCE-Dark /usr/share/themes
+mv /home/USERID/Downloads/McOS-CTLina-XFCE /usr/share/themes
+mv /home/USERID/Downloads/McOS-CTLina-XFCE-Dark /usr/share/themes
 chown -R root:root /usr/share/themes/McOS-CTLina-XFCE*
 chmod -R go-w /usr/share/themes/McOS-CTLina-XFCE*
 find /usr/share/themes/McOS-CTLina-XFCE* -type d -exec chmod +x '{}' \+
@@ -115,7 +117,7 @@ As root
 
 ```console
 mkdir /usr/share/fonts/macOS
-mv /home/user>/Downloads/XO.for.Dash.to.DOCK-GNOME.3.36/FONT/San* /usr/share/fonts/macOS
+mv /home/USERID/Downloads/XO.for.Dash.to.DOCK-GNOME.3.36/FONT/San* /usr/share/fonts/macOS
 chown root:root /usr/share/fonts/macOS/San*
 chmod go-x /usr/share/fonts/macOS/San*
 find /usr/share/fonts/macOS/San* -type d | while read x
@@ -134,8 +136,8 @@ As root
 
 ```console
 mkdir /usr/share/fonts/macOS
-mv /home/<USERID>/Downloads/Meslo\ LG\ DZ\ v1.2.1/*.ttf /usr/share/fonts/macOS
-mv /home/<USERID>/Downloads/Meslo\ LG\ v1.2.1/*.ttf /usr/share/fonts/macOS
+mv /home/USERID/Downloads/Meslo\ LG\ DZ\ v1.2.1/*.ttf /usr/share/fonts/macOS
+mv /home/USERID/Downloads/Meslo\ LG\ v1.2.1/*.ttf /usr/share/fonts/macOS
 chown root:root /usr/share/fonts/macOS/*
 chmod go-x /usr/share/fonts/macOS/*
 find /usr/share/fonts/macOS -type d | while read x
@@ -159,7 +161,7 @@ As root
 
 ```console
 cd /usr/share/icons/
-tar xf /home/<user>/Downloads/Os-Catalina-icons.tar.xz
+tar xf /home/USERID/Downloads/Os-Catalina-icons.tar.xz
 mv /usr/share/icons/Os-Catalina-icons /usr/share/icons/Os-Catalina
 chown -R root:root /usr/share/icons/Os-Catalina*
 chmod -R go-w /usr/share/icons/Os-Catalina*
@@ -182,7 +184,7 @@ As root
 
 ```console
 cd /usr/share/icons/
-mv /home/<user>/Downloads/Cupertino-Ventura/Cupertino-Ventura .
+mv /home/USERID/Downloads/Cupertino-Ventura/Cupertino-Ventura .
 chown -R root:root /usr/share/icons/Cupertino-Ventura
 chmod -R go-w /usr/share/icons/Cupertino-Ventura
 find /usr/share/icons/Cupertino-Ventura -type d | while read x
@@ -208,7 +210,7 @@ Download the "55995-apple_logo.tar.tar" file. Extract the archives in "~/Downloa
 As root
 
 ```console
-mv /home/<USERID>/Downloads/55995-apple_logo/*.svg /usr/share/icons/Os-Catalina/128x128/apps/
+mv /home/USERID/Downloads/55995-apple_logo/*.svg /usr/share/icons/Os-Catalina/128x128/apps/
 chown root:root /usr/share/icons/Os-Catalina/128x128/apps/apple_logo_*
 chmod go-Wx /usr/share/icons/Os-Catalina/128x128/apps/apple_logo_*
 cp /usr/share/icons/Os-Catalina/128x128/apps/apple_logo_*  /usr/share/icons/Os-Catalina-Night/128x128/apps/
@@ -226,7 +228,7 @@ Download the two archives and extract them in the Download folder.
 Both are based on [github: ful1e5 / apple_cursor](https://github.com/ful1e5/apple_cursor)
 
 ```console
-mv /home/<USERID>/Downloads/macOS-Monterey*  /usr/share/icons/
+mv /home/USERID/Downloads/macOS-Monterey*  /usr/share/icons/
 chown -R root:root /usr/share/icons/macOS-Monterey*
 chmod -R go-w /usr/share/icons/macOS-Monterey*
 find /usr/share/icons/macOS-Monterey* -type d | while read x
@@ -261,7 +263,7 @@ tar -zcvf XFCEmacOSlike.tar.gz -C ~ /usr/share/cairo-dock/themes/MacOSX /usr/sha
 Extract on target system, using command:
 
 ```console
-tar -xzvf /home/<USERID>/XFCEmacOSlike.tar.gz -C /
+tar -xzvf /home/USERID/XFCEmacOSlike.tar.gz -C /
 ```
 
 
