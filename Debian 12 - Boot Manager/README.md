@@ -87,10 +87,11 @@ by using the font "[InsydeH2O Setup Utility](https://fontstruct.com/fontstructio
 1. download the archive "insydeh2o-setup-utility.zip" of the font "[InsydeH2O Setup Utility](https://fontstruct.com/fontstructions/show/2186015)" and extract the archive in the Download folder.
 2. convert the font into an PFF2 formated font file, using command: `grub-mkfont --size=16 --output=insydeh2o_regular_16.pf2 "/home/USERID/Downloads/insydeh2o-setup-utility/insydeh2o-setup-utility.ttf"`
 3. copy the newly created file "insydeh2o_regular_16.pf2" into the directory `/boot/grub/themes/OldBIOS/f`
-4. add the following two lines to `/etc/default/grub`
+4. in file `OldBIOS/theme.txt` replace `Mbytepc230 Regular 16` and `MBytePC230 Regular 16` by `InsydeH2O Setup Utility Regular 16`
+5. add the following two lines to `/etc/default/grub`
 
 ```code
 # In combination with font "InsydeH2O Setup Utility" https://fontstruct.com/fontstructions/show/2186015
 GRUB_GFXMODE=1024x768
 ```
-5. update the GRUB runtime
+6. update the GRUB runtime
