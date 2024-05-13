@@ -12,8 +12,8 @@ BTW
 
 | Test Nr. | Application | Version | Mobile OS | AES/Rijndael & AES-KDF | ChaCha & AES-KDF | AES/Rijndael & Argon2d | ChaCha & Argon2d | AES/Rijndael & Argon2id | ChaCha & Argon2id | 
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | 
-| 1 | AuthPass | 1.9.7+162 | Android 10 | Ok | Ok | Ok | Ok | Failed | Failed |
-| 2 | AuthPass | 1.9.9+1975 | iOS 15 | Ok | Ok | Ok | Ok | Failed | Failed |
+| 1 | AuthPass | 1.9.11 | Android 10 | Ok | Ok | Ok | Ok | Failed | Failed |
+| 2 | AuthPass | 1.9.10 | iOS 15 | Ok | Ok | Ok | Ok | Failed | Failed |
 | 3 | KeePass2Android | 1.09e-r7 | Android 10 | Ok | Ok | Ok | Ok | Ok | Ok |
 | 4 | KeePassium | v1.46.140 | iOS 15 | Ok | Ok | Ok | Ok | Ok | Ok |
 
