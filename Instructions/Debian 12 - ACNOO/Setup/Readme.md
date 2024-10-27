@@ -55,10 +55,11 @@ Independent of the instance.
 
 - Users
 	- User: `aosysuserao`
-	- Email: `aoadmin@addressao`
-	- Phone Region: `aophoneregionao`
+	- Email: `aoadmin@addressao` (e.g. "user@example.com")
+	- Phone Region: `aophoneregionao` (e.g. "DE")
+  - Time Zone: `aotimezoneao` (e.g. "Europe/Amsterdam")
 - Router
-	-  Local IP address: `aorouteraddressao` 
+	-  Local IP address: `aorouteraddressao` (e.g. 10.0.0.1)
 - Host
 	- Host name: `nchostnc`
 - Web-Server
@@ -1848,10 +1849,11 @@ Further adjustments
 
 ```console
 sudo --user=www-data php /var/www/ncdirectorync/occ config:system:set memcache.local --value "\OC\Memcache\APCu"
-sudo --user=www-data php /var/www/ncdirectorync/occ config:system:set filelocking.enabled --value "true"
+sudo --user=www-data php /var/www/ncdirectorync/occ config:system:set filelocking.enabled --type=boolean --value true
 sudo --user=www-data php /var/www/ncdirectorync/occ config:system:set maintenance_window_start --value "1"
-sudo --user=www-data php /var/www/ncdirectorync/occ config:system:set default_phone_region --value "DE"
+sudo --user=www-data php /var/www/ncdirectorync/occ config:system:set default_phone_region --value "aophoneregionao"
 sudo --user=www-data php /var/www/ncdirectorync/occ config:app:set workflowengine logfile --value=/var/log/nextcloud/flow.log
+sudo --user=www-data php /var/www/ncdirectorync/occ config:system:set simpleSignUpLink.shown --type=boolean --value=false
 ```
 
 #### The `config.php` file
@@ -1879,7 +1881,7 @@ $CONFIG = array (
   'updater.release.channel' => 'git',
   'installed' => true,
   'memcache.local' => '\\OC\\Memcache\\APCu',
-  'filelocking.enabled' => 'true',
+  'filelocking.enabled' => true,
   'memcache.distributed' => '\\OC\\Memcache\\Redis',
   'memcache.locking' => '\\OC\\Memcache\\Redis',
   'redis' => 
@@ -1889,13 +1891,14 @@ $CONFIG = array (
     'port' => '0',
   ),
   'maintenance_window_start' => '1',
-  'default_phone_region' => 'DE',
+  'default_phone_region' => 'aophoneregionao',
   'trusted_domains' => 
   array (
     0 => 'aorouteraddressao',
     1 => '127.0.0.1',
     2 => '::1',
   ),
+  'simpleSignUpLink.shown' => false,
 );
 ```
 
@@ -2611,7 +2614,7 @@ sudo --user=www-data php /var/www/ncdirectorync/occ config:system:set redis port
 sudo --user=www-data php /var/www/ncdirectorync/occ config:system:set redis dbindex --value "3"
 ```
 
-INFO: Your installation has no default phone region set. This is required to validate phone numbers in the profile settings without a country code. To allow numbers without a country code, please add "default_phone_region" with the respective ISO 3166-1 code of the region to your config file. For more details see the [documentation ↗](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements).
+INFO: Your installation has no default phone region set. This is required to validate phone numbers in the profile settings without a country code. To allow numbers without a country code, please add "default_phone_region" with the respective of the region to your config file. For more details see the [documentation ↗](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements).
 ACTION: Execute the folowing command.
 ```console
 sudo --user=www-data php /var/www/ncdirectorync/occ config:system:set default_phone_region --value="aophoneregionao"

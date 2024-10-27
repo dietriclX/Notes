@@ -159,16 +159,26 @@ ada0
 - ✔️✏️ select "<YES>"
 - ✔️ press ENTER
 
+The installation happens now ...
+
 At the end you have the option to change the root password and to finish the installation and reboot the system.
+
+Dialog "Final Configuration"
+
+```code
+Root Password Change root password
+Complete Install Exit and reboot
+```
 
 # Configuration (1st time)
 
 From the boot of the Live Image, I know that the LAN device is `igb0` which is the top RF45 connector on the card. With a PC connected to the new OPNsense box, the system received an IP-Address (checked with `ip a`) and be able to open URL "https://192.168.1.1".
 
-## Hostname
+## Hostname & Domain
 
 - navigate to menu "**System** > **Settings** > **General**"
 - ✔️✏️ enter host name, into field "**Hostname**"
+- ✔️✏️ enter domain (e.g. "private"), into field "**Domain**"
 - ✔️ click on "Save"
 
 ## RAM Disk (tmpfs)
@@ -187,3 +197,22 @@ From the boot of the Live Image, I know that the LAN device is `igb0` which is t
 - ✔️✏️ select entry from listbox, in line of "**[WAN]    wan**"
 - ✔️ click on "Save"
 
+## Server in DMZ
+
+In case you have create a kind of DMZ, by running OPNsense behind the DSL Router and with a server (nchostnc with Nextcloud) connected to the DSL Router ... In order to access this server by name, do the following.
+
+- navigate to menu "**Services** > **Unbound DNS** > **Overrides**"
+- select tab "Host Overrides"
+- 🪜 click on "**+**", under the top list, to add new entry
+    - ✔️✏️ enter "nchostnc" in field "**Host**"
+    - ✔️✏️ enter "private" in field "**Domain**"
+    - ✔️✏️ select "A (IPv4 address)" as "**Type**"
+    - ✔️✏️ enter IP-Address of nchostnc in field "**IP address**"
+    - 🛝 click on "**Save**"
+- in top list, select newly created entry
+- focus on section "**Aliases**"
+- 🪜 click on "**+**" (section "**Aliases**"), under bottom list, to add new entry
+    - ✔️✏️ select "nchostnc.private" as "**Host override**"
+    - ✔️✏️ enter "nchostnc" in field "**Host**"
+    - 🛝 click on "**Save**"
+- ✔️ click on "Apply" at the bottom
