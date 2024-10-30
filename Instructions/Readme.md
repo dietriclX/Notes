@@ -1,6 +1,10 @@
 **The meaning of ...**
 Or, how to interpret certain formatting and content. 
 
+# Language
+
+I tend to document everything in English. Most systems/applications offer nowadays the option to easily switch the between the languages.
+
 # Names
 
 Regular instructions on a software product, use the product name at several placed, for example as a directory name but also as database name. This might lead to confusion and makes it hard to easily adjust a installation/configuration.
