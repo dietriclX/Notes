@@ -8,7 +8,7 @@ In the "**⚙ Settings**" of Firefox follow the [instructions](https://github.co
 	- 🪜 tap on "**Block trackers & ads**"
 		- 🖉 select option "**Block trackers & ads (Aggressive)**"
 		- 🛝 tap on "**Done**"
-	- 🪜 tap on "**Content Filterung**"
+	- 🪜 tap on "**Content Filtering**"
 		- 🖉 tap on "**Update**"
 		- 🖉 enable every variation of ³
 			- "**AdGuard**" 
@@ -101,7 +101,13 @@ In the "**⚙ Settings**" of Firefox follow the [instructions](https://github.co
 	- 🛝 navigate back
 - 🪜 tap on "**Appearance**"
 	- 🖉 ~~disable~~ "**Brave Rewards Icon**" ¹
+	- 🖉 ~~disable~~ "**Enable bottom toolbar**" ¹
 	- 🖉 enable "**Disable Sharing Hub**" ¹
+	- 🛝 navigate back
+- 🪜 tap on "**New Tab Page**"
+	- 🖉 ~~disable~~ "**Show Background Images**" ¹
+	- 🖉 ~~disable~~ "**Show Top Sites**" ¹
+	- 🖉 ~~disable~~ "**Show Brave Stats**" ¹
 	- 🛝 navigate back
 - 🪜 tap on "**Languages**"
 	- 🖉 ~~disable~~ "**Use Brave Translate**" ¹
@@ -112,6 +118,7 @@ In the "**⚙ Settings**" of Firefox follow the [instructions](https://github.co
 - 🪜 tap on "**Addresses and more**"
 	- 🖉 ~~disable~~ "**Save and fill addresses**"
 	- 🛝 navigate back
+- 🖉 ~~disable~~ "**Autofill in private tabs**"
 
 
 ¹ Requires a restart of the browser.
@@ -130,4 +137,4 @@ The first kind of notification to be ignored is "Close private tabs?". Fir this 
 - 🪜 tap on "Turn off notifications"
 	- 👁 watch the blinking option, as this is the notification you want to turn off
 	- ✓🖉 ~~disable~~ the kind of notification, you do not want to see anymore
-	- ✓🛝 tap on "**Apply**" (switch from "**Done**" indicates desired the change)
+	- ✓🛝 tap on "**Apply**" (switch from "**Done**" a change)
