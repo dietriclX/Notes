@@ -269,135 +269,116 @@ tar -xzvf /home/USERID/XFCEmacOSlike.tar.gz -C /
 
 # Activitation
 
+Install some packages.
+
 ```console
 apt install -y xfce4-appmenu-plugin cairo-dock
 ```
 
-Einstellungen > Erscheinungsbild
+- 🪜 open XFCE menu "**Settings** > **Appearance**"
+  - navigate to tab "**Style**"
+  - 🖉 select theme "**McOS-XFCE-Edition**"
+  - navigate to tab "**Icons**"
+  - 🖉 select theme "**Cupertino-Ventura**"
+  - navigate to tab "**Fonts**"
+  - 🪜 click on button below "**Default Font**"
+    - ✓🖉 select font "**San Francisco Display Regular**"
+    - ✓🛝 click on "**Select**"
+  - 🪜 click on button below "**Default Monospace Font**"
+    - ✓🖉 select font "**Meslo LG L Regular**"
+    - ✓🛝 click on "**Select**"
+  - 🛝 click on "**Close**"
+- 🪜 open XFCE menu "**Settings** > **Windows Manager**"
+  - navigate to tab "**Style**"
+  - 🖉 select theme "**McOS-XFCE-Edition**"
+- 🪜 click on button below "**Title font**"
+    - ✓🖉 select font "**San Francisco Display Regular**"
+    - ✓🛝 click on "**Select**"
+  - 🖉 drag&drop "**▼**" from group "**Active**" to "**Hidden**"
+  - 🖉 drag&drop "**🠅**" from group "**Active**" to "**Hidden**"
+  - 🖉 rearrange button from group "**Active**" in this order "**_ 🗖 x Titel**"
+  - 🛝 click on "**Close**"
+- 🪜 open XFCE menu "**Settings** > **Windows Manager Tweaks**"
+  - navigate to tab "**Compositor**"
+  - 🖉 ~~disable~~ option "**Show shadows under regular windows**"
+  - 🖉 ~~disable~~ option "**Show shadows under popup windows**"
+  - 🖉 ~~disable~~ option "**Show shadows under dock windows**" ¹
+  - 🛝 click on "**Close**"
+- 🪜 open XFCE menu "**Settings** > **Mouse and Touchpad**"
+  - navigate to tab "**Theme**"
+  - 🖉 select theme "**macOS-Monterey-White**"
+  - 🛝 click on "**Close**"
+- 🪜 open XFCE menu "**Settings** > **Xfce Termin Preferences**"
+  - navigate to tab "**Appearance**"
+  - 🖉 enable option "**Use system font**"
+  - 🛝 click on "**Close**"
+- 🪜 open XFCE menu "**Settings** > **Session and Startup**"
+  - navigate to tab "**Application Autostart**"
+  - 🪜 click on "**➕ Add**" button
+    - ✓🖉 specify "Glx-Dock / Cairo-Dock" as "**Name**"
+    - ✓🖉 specify "An OS-X-Dock like starter/task bar" as "**Description**"
+    - ✓🖉 specify "cairo-dock &" as "**Command**"
+    - ✓🖉 select "on login" as "**Trigger**"
+    - ✓🛝 click on "**OK**"
+  - 🛝 click on "**Close**"
+- logout of XFCE session
 
-Theme: McOS-XFCE-Edition
-Icons: Cupertino-Ventura
-Fonts San Francisco Display Regular
-Fonts Meslo LG L Regular
+- login to XFCS session
+- 👁 ensure the Cairo-Dock is visible!
+- 🪜 open XFCE menu "**Settings** > **Panel**"
+  - navigate to tab "**Items**"
+  - from top listbox select a panel, which items do matches those from the **bottom** panel ("Panel 1")
+  - 🪜✓🖉 click on the "**🗑**" button to delete the panel
+      - ✓🛝 click on "**Remove**" to confirm the deletion
+  - modify the remaining top panel ("Panel 0")
+  - navigate to tab "**Display**"
+  - 🖉 enable option "**Keep panel above windows**"
+  - navigate to tab "**Appearance**"
+  - 🖉 ~~disable~~ option "**Dark mode**"
+  - navigate to tab "**Items**"
+  - 🖉 add/remove/reorder the items to get at the end
+    - Separator
+      - Style: Transparent
+      - Expand: _
+    - Whisker Menu
+      - Symbol: /usr/share/icons/Cupertino-Ventura/apple_logo_grey.svg
+    - AppMenu Plugin
+    - Separator
+      - Style: Transparent
+      - Expand: x
+    - Indicator Plugin
+    - Separator
+      - Style: Transparent
+      - Expand: _
+    - Status Tray Plugin
+    - Separator
+      - Style: Transparent
+      - Expand: _
+    - PulseAudio Plugin
+    - Notification Plugin
+    - Engerieverwaltungserweiterung
+    - Separator
+      - Style: Transparent
+      - Expand: _
+    - Clock (Properties > Einstellungen für die Uhr > Anordnung: Ausschließlich Datum)
+    - Separator
+      - Style: Transparent
+      - Expand: _
+    - Clock (Properties > Einstellungen für die Uhr > Anordnung: Ausschließlich Uhrzeit)
+    - Separator
+      - Style: Transparent
+      - Expand: _
+  - navigate to tab "**Items**"
+- in the Cairo Dock open context menu of one of the symbols XFCE menu
+- 🪜 choose menu "**Cairo-Dock** > **Configure**"
+  - navigate to tab "**Configuration** > **Behaviour**"
+  - ✓🖉 select "End of Dock" for "**Place new icons**" in section "**Taskbar**"
+  - ✓🖉 select "Bounce" for "**On click**" in section "**Icon's animation and effects**'
+  - navigate to tab "**Themes**"
+  - ✓🖉 select theme "**mcOS-BS-White**"
+  - ✓ click on "**Apply**"
 
-
-Einstellungen > Fensterverwaltung
-
-Theme: McOS-XFCE-Edition
-Title Font: San Francisco Display Regular
-
-Button Order: _ 🗖 x Titel
-
-
-
-Settings > Windows Manager Tweaks
-
-tab "Compositor"
-
-:
-_ Schatten unter Benachrichtigungsfenster anzeigen
-_ Schatten untere Leiste anzeigen
-_ Schatten unter normalem Fenster anzeigen
-:
-
-Based on [Horizontal Line Across the Screen on Xfce](https://nochkawtf.wordpress.com/2015/05/03/horizontal-line-across-screen-on-xfce/)
-
-
-Einstellungen > Maus und Touchpad
-
-tab "Mausthema"
-
-select "macOS-Monterey-White"
-
-
-Xfce Termin-Einstellungen
-
-tab "Aussehen"
-
-Font
-
-enable "Systemschrift verwenden"
-or
-"Meslo LG L Regular" 12
-
-
-In the "Einstellungen > Sitzung und Startverhalten", select tab "Automatisch gestartete Anwendungen". Add the application
-- Name: Glx-Dock / Cairo-Dock
-- Beschreibung: An OS-X-Dock like starter/task bar
-- Befehl: cairo-dock &
-- Auslöser: bei der Anmeldung
-
-Logout and Login again.
-
-
-Ensure that the Cairo-Dock is visible!
-
-Einstellungen > Leiste
-
-select "Leiste 1" (this is the one to be replaced by the "Cairo-Dock")
-
-tab "Objekte"
-???
-
-click on "-" and confirm the deletion
-
-select "Leiste 0"
-
-tab "Anzeige"
-
-_ Leiste über den Fenster halten
-
-
-tab "Objekte"
-
-Whisker-Menü
-AppMenu-Plugin
-Aktionsknöpfe
-Trennelement
-Netzwerk-Manager-Applet
-Trennelement
-Nachrichtenanzeige
-Trennelement
-Status-Tray-Erweiterung
-Trennelement
-Engerieverwaltungserweiterung
-Wavelan
-PulseAudio-Modul
-Benachrichtigungserweiterung
-Uhr (Properties > Einstellungen für die Uhr > Anordnung: Ausschließlich Datum)
-Uhr (Properties > Einstellungen für die Uhr > Anordnung: Ausschließlich Uhrzeit)
-
-select "Whisker-Menü"
-click on the gear-symbol to modify this object
-=> new dialog "Whisker-Menü"
-select tab "Aussehen"
-click on the field next to "Symbol"
-select `/usr/share/icons/Cupertino-Ventura/apple_logo_grey.svg`
-click on "OK"
-click on "OK"
-
-
-Cairo-Dock > Konfigurieren
-
-tab "Einstellungen > Verhalten"
-
-group "Anwendungsleiste"
-
-Neue Symbole plazieren: Am Ende des Docks
-
-
-group "Symbolanimation und Effekte"
-
-Beim draufklicken   Animation: Springen
-
-
-tab "Themen > Thema laden"
-
-select "mcOS-BS-White"
-
-
-hinter Papierkorb, context menu "Cairo-Dock > Hinzufügen > Trenner"
-
+¹ From [Horizontal Line Across the Screen on Xfce](https://nochkawtf.wordpress.com/2015/05/03/horizontal-line-across-screen-on-xfce/)
 
 
 Install icon for "Xournal++"

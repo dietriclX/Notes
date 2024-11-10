@@ -522,7 +522,7 @@ mv ncdirectorync ncdirectorync.BAK
 mv server ncdirectorync
 cd ncdirectorync.BAK
 cp config/config.php /var/www/ncdirectorync/config
-cd ncdirectorync.BAK/apps
+cd apps
 ls --directory * | while read d
 do
   if [ ! -d "/var/www/ncdirectorync/apps/$d" ]; then
@@ -533,6 +533,7 @@ cd /var/www/
 chown -R www-data:www-data ncdirectorync
 find ncdirectorync/ -type d -exec chmod 750 {} \;
 find ncdirectorync/ -type f -exec chmod 640 {} \;
+chmod 740 ncdirectorync/apps/notify_push/bin/x86_64/notify_push
 systemctl start apache2 coturn ds-converter ds-docservice ds-metrics php8.2-fpm
 sudo --user=www-data php /var/www/ncdirectorync/occ upgrade
 sudo --user=www-data php /var/www/ncdirectorync/occ maintenance:mode --off

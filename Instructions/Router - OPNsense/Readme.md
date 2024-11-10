@@ -216,3 +216,26 @@ In case you have create a kind of DMZ, by running OPNsense behind the DSL Router
     - ✔️✏️ enter "nchostnc" in field "**Host**"
     - 🛝 click on "**Save**"
 - ✔️ click on "Apply" at the bottom
+
+# Configuration - Proxy
+
+## Installation
+
+- navigate to menu "**System** > **Firmware** > **Plugins**"
+- select tab "Plugins"
+- ✏️ click on "**+**", of line "**os-squid**"
+
+## Configure
+
+- specify Memory Cache only with 12GB (16GB installed RAM)
+- navigate to menu "**Services** > **Squid Web Proxy** > **Administration**"
+- choose tab menu option "**Gerneral Proxy Settings** > **Local Cache Settings**"
+- ✔️✏️ specify "12288" in field "**Memory Cache size in Megabytes**" (12GB)
+- ✔️✏️ ~~disable~~ "**Enable local cache**"
+- ✔️ click on "Apply" at the bottom
+- choose tab menu option "**Forward Proxy** > **General Forward Settings**"
+- ✔️✏️ select "LAN" from listbox "**Proxy interface**"
+- ✔️ click on "Apply" at the bottom
+- choose menu option "**Proxy Auto-Config** > **Matches**"
+- ✔️✏️ select "LAN" from listbox "**Proxy interface**"
+- ✔️ click on "Apply" at the bottom
