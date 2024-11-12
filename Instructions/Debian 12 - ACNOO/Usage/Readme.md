@@ -539,6 +539,32 @@ sudo --user=www-data php /var/www/ncdirectorync/occ upgrade
 sudo --user=www-data php /var/www/ncdirectorync/occ maintenance:mode --off
 ```
 
+# Apackage Management
+
+## Restrict updates
+
+I run into an issue with ONLYOFFICE and had to go back to a previous version. I wanted to prevent ONLYOFFICE to be update for the next period, at least until a new version becomes available. The keywords are "mark", "hold" and "unhold".
+
+### Hold package
+
+Example: ONLYOFFICE Documentserver
+
+```console
+# apt-mark hold onlyoffice-documentserver
+onlyoffice-documentserver set on hold.
+# 
+```
+
+### Unhold package
+
+Example: ONLYOFFICE Documentserver
+
+```console
+# apt-mark unhold onlyoffice-documentserver
+Canceled hold on onlyoffice-documentserver.
+# 
+```
+
 ## Tips
 
 ### Apache
