@@ -100,135 +100,134 @@ Once the script is stable and can be executed every night at 01:15, insert the f
 
 *Note: The internet offers a variety of tools to help with cron job scheduling. For example [Cronitor](https://crontab.guru)*
 
+At the end of the script, the log file will be send to the administrators email address. The two lines above (starting with `#`) show the usage of pgp encryption.
+
 === `/root/backup_system.sh` ===
 
 ```code
 #!/bin/bash
-DEV=/dev/sdb1
 
 START=$(date +'%Y%m%d-%H%M')
 STARTDATE=$(date +'%Y%m%d')
-LOG=/backup/$START.log
+STARTTIME=$(date +'%H%M')
+LOGTMP=/tmp/backup_system_$START.out
 
 # Mount Backup device
-echo "$(date +'%H:%M:%S') Device: mounting ..." >> /tmp/backup_system_$START.out
+echo "$(date +'%H:%M:%S') Device: mounting ..." >> $LOGTMP
 mount /backup
 retVal=$?
 if [ $retVal -ne 0 ]; then
-    echo "$(date +'%H:%M:%S') Device: not available" >> /tmp/backup_system_$START.out
-    echo "$(date +'%H:%M:%S') Device: lsblk" >> /tmp/backup_system_$START.out
-    lsblk >> /tmp/backup_system_$START.out
+    echo "$(date +'%H:%M:%S') Device: not available" >> $LOGTMP
+    echo "$(date +'%H:%M:%S') Device: lsblk" >> $LOGTMP
+    lsblk >> $LOGTMP
     exit 1
 fi
-echo "$(date +'%H:%M:%S') Device: mounted" >> /tmp/backup_system_$START.out
+echo "$(date +'%H:%M:%S') Device: mounted" >> $LOGTMP
 
 # Mount was successful ... do a quick check if the device was intended for the job
-cat /tmp/backup_system_$START.out >> $LOG
 if [ -f "/backup/ACNOO-Backup" ]; then
-  echo "$(date +'%H:%M:%S') Device: contains the marker file ACNOO-Backup" >> $LOG
+  echo "$(date +'%H:%M:%S') Device: contains the marker file ACNOO-Backup" >> $LOGTMP
 else
   # keep the temporary log file in /tmp
-  echo "$(date +'%H:%M:%S') Device: MISSING marker file ACNOO-Backup" >> /tmp/backup_system_$START.out
-  echo "$(date +'%H:%M:%S') Device: MISSING marker file ACNOO-Backup" >> $LOG
+  echo "$(date +'%H:%M:%S') Device: MISSING marker file ACNOO-Backup" >> $LOGTMP
 fi
 
 # Check for existing today directory. If found, backup the same.
 if [ -d "/backup/today" ]; then
-  echo "$(date +'%H:%M:%S') Subdirectory /backup/today already exists" >> $LOG
-  mv /backup/today /backup/today_before_$START 2>&1 >> $LOG
-  echo "$(date +'%H:%M:%S') renamed to today_before_$START" >> $LOG
+  echo "$(date +'%H:%M:%S') Subdirectory /backup/today already exists" >> $LOGTMP
+  mv /backup/today /backup/today_before_$START 2>&1 >> $LOGTMP
+  echo "$(date +'%H:%M:%S') renamed to today_before_$START" >> $LOGTMP
 else
-  echo "$(date +'%H:%M:%S') Subdirectory /backup/today does not exist" >> $LOG
+  echo "$(date +'%H:%M:%S') Subdirectory /backup/today does not exist" >> $LOGTMP
 fi
 
 # Create today directory with read/write for everyone
-mkdir /backup/today 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') Created today directory" >> $LOG
-echo "$(date +'%H:%M:%S') Let everyone write into today directory" >> $LOG
-chmod 777 /backup/today 2>&1 >> $LOG
-chmod 666 $LOG 2>&1 >> $LOG
+mkdir /backup/today 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') Created today directory" >> $LOGTMP
+echo "$(date +'%H:%M:%S') Let everyone write into today directory" >> $LOGTMP
+chmod 777 /backup/today 2>&1 >> $LOGTMP
 
 # Disable cron jobs for www-data
-echo "$(date +'%H:%M:%S') User www-data: backup and disable cron jobs" >> $LOG
-crontab -l -u www-data > /backup/today/www-data.cron.backup  2>> $LOG
-crontab -r -u www-data 2>&1 >> $LOG
+echo "$(date +'%H:%M:%S') User www-data: backup and disable cron jobs" >> $LOGTMP
+crontab -l -u www-data > /backup/today/www-data.cron.backup  2>> $LOGTMP
+crontab -r -u www-data 2>&1 >> $LOGTMP
 
 # Put Nextcloud into maintenance mode
-echo "$(date +'%H:%M:%S') Nextcloud: turn Maintenance-Mode ON" >> $LOG
-sudo -u www-data php /var/www/ncdirectorync/occ maintenance:mode --on 2>&1 >> $LOG
+echo "$(date +'%H:%M:%S') Nextcloud: turn Maintenance-Mode ON" >> $LOGTMP
+sudo -u www-data php /var/www/ncdirectorync/occ maintenance:mode --on 2>&1 >> $LOGTMP
 
 cd /backup/today
 
 # Backup Databases
-echo "$(date +'%H:%M:%S') ONLYOFFICE: backup database ..." >> $LOG
-sudo --user=postgres pg_dump --username=postgres oodatabaseoo --file=oodatabaseoo.pgsql 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') ONLYOFFICE: backup done" >> $LOG
-echo "$(date +'%H:%M:%S') coturn: backup database ..." >> $LOG
-sudo --user=postgres pg_dump --username=postgres ctdatabasect --file=ctdatabasect.pgsql 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') coturn: backup done" >> $LOG
-echo "$(date +'%H:%M:%S') Nextcloud: backup database ..." >> $LOG
-sudo --user=postgres pg_dump --username=postgres ncdatabasenc --file=ncdatabasenc.pgsql 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') Nextcloud: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') ONLYOFFICE: backup database ..." >> $LOGTMP
+sudo --user=postgres pg_dump --username=postgres oodatabaseoo --file=oodatabaseoo.pgsql 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') ONLYOFFICE: backup done" >> $LOGTMP
+echo "$(date +'%H:%M:%S') coturn: backup database ..." >> $LOGTMP
+sudo --user=postgres pg_dump --username=postgres ctdatabasect --file=ctdatabasect.pgsql 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') coturn: backup done" >> $LOGTMP
+echo "$(date +'%H:%M:%S') Nextcloud: backup database ..." >> $LOGTMP
+sudo --user=postgres pg_dump --username=postgres ncdatabasenc --file=ncdatabasenc.pgsql 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') Nextcloud: backup done" >> $LOGTMP
 
 # Log
-echo "$(date +'%H:%M:%S') /var/log: backup files ..." >> $LOG
-tar -zcf var_log.tar.gz /var/log 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') /var/log: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') /var/log: backup files ..." >> $LOGTMP
+tar -zcf var_log.tar.gz /var/log 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') /var/log: backup done" >> $LOGTMP
 
 # OS related
-echo "$(date +'%H:%M:%S') OS: backup files ..." >> $LOG
-tar -zcf osandco.tar.gz /etc/apt/sources.list /etc/apt/sources.list.d/onlyoffice.list /etc/default/grub /etc/fstab /etc/ssh /etc/ssl/certs/own_ca.crt /etc/ssl/crl/own_ca.crl /etc/ssl/certs/nchostnc.crt /etc/ssl/certs/aodomainao.crt /etc/ssl/private/nchostnc.key /etc/ssl/private/aodomainao.key /etc/tmpfiles.d/log-subfolder.conf /home/aosysuserao/.ssh /usr/share/keyrings/onlyoffice.gpg 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') OS: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') OS: backup files ..." >> $LOGTMP
+tar -zcf osandco.tar.gz /etc/apt/sources.list /etc/apt/sources.list.d/onlyoffice.list /etc/default/grub /etc/fstab /etc/ssh /etc/ssl/certs/own_ca.crt /etc/ssl/crl/own_ca.crl /etc/ssl/certs/tiny.crt /etc/ssl/certs/aodomainao.crt /etc/ssl/private/tiny.key /etc/ssl/private/aodomainao.key /etc/tmpfiles.d/log-subfolder.conf /home/aosysuserao/.ssh /usr/share/keyrings/onlyoffice.gpg 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') OS: backup done" >> $LOGTMP
 
 # Apache
-echo "$(date +'%H:%M:%S') Apache: backup files ..." >> $LOG
-tar -zcf apache2.tar.gz /etc/apache2/conf-enabled/security.conf /etc/apache2/sites-available/any.conf /etc/apache2/sites-available/*-include.conf /var/www/html/incorrect_client_certificate.php /var/www/html/phpinfo.php 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') Apache: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') Apache: backup files ..." >> $LOGTMP
+tar -zcf apache2.tar.gz /etc/apache2/conf-enabled/security.conf /etc/apache2/sites-available/any.conf /etc/apache2/sites-available/*-include.conf /var/www/html/incorrect_client_certificate.php /var/www/html/phpinfo.php 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') Apache: backup done" >> $LOGTMP
 
 # coturn
-echo "$(date +'%H:%M:%S') coturn: backup files ..." >> $LOG
-tar -zcf coturn.tar.gz /etc/turnserver.conf /lib/systemd/system/coturn.service 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') coturn: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') coturn: backup files ..." >> $LOGTMP
+tar -zcf coturn.tar.gz /etc/turnserver.conf /lib/systemd/system/coturn.service 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') coturn: backup done" >> $LOGTMP
 
 # Let's Encrypt
-echo "$(date +'%H:%M:%S') Let's Encrypt: backup files ..." >> $LOG
-tar -zcf letsencrypt.tar.gz /etc/letsencrypt 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') Let's Encrypt: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') Let's Encrypt: backup files ..." >> $LOGTMP
+tar -zcf letsencrypt.tar.gz /etc/letsencrypt 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') Let's Encrypt: backup done" >> $LOGTMP
 
 # Nextcloud
-echo "$(date +'%H:%M:%S') Nextcloud: backup files ..." >> $LOG
-tar -zcf nextcloud.tar.gz /etc/systemd/system/notify_push.service /var/www/ncdirectorync /var/lib/nextcloud 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') Nextcloud: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') Nextcloud: backup files ..." >> $LOGTMP
+tar -zcf nextcloud.tar.gz /etc/systemd/system/notify_push.service /var/www/ncdirectorync /var/lib/nextcloud 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') Nextcloud: backup done" >> $LOGTMP
 
 # nginx
-echo "$(date +'%H:%M:%S') nginx: backup files ..." >> $LOG
-tar -zcf nginx.tar.gz /etc/nginx/nginx.conf 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') nginx: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') nginx: backup files ..." >> $LOGTMP
+tar -zcf nginx.tar.gz /etc/nginx/nginx.conf 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') nginx: backup done" >> $LOGTMP
 
 # ONLYOFFICE
-echo "$(date +'%H:%M:%S') ONLYOFFICE: backup files ..." >> $LOG
-tar -zcf onlyoffice.tar.gz /var/lib/onlyoffice/ /var/www/onlyoffice 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') ONLYOFFICE: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') ONLYOFFICE: backup files ..." >> $LOGTMP
+tar -zcf onlyoffice.tar.gz /etc/onlyoffice/documentserver /etc/onlyoffice/documentserver-example /var/lib/onlyoffice /var/www/onlyoffice 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') ONLYOFFICE: backup done" >> $LOGTMP
 
 # OpenVPN
-echo "$(date +'%H:%M:%S') OpenVPN: backup files ..." >> $LOG
-tar -zcf openvpn.tar.gz /etc/openvpn/server /etc/ssl/certs/dhparams.aodomainao.pem /etc/ssl/certs/aodomainao.crt /etc/ssl/private/aodomainao.key /etc/ssl/private/ta.aodomainao.key 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') OpenVPN: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') OpenVPN: backup files ..." >> $LOGTMP
+tar -zcf openvpn.tar.gz /etc/openvpn/server /etc/ssl/certs/dhparams.aodomainao.pem /etc/ssl/certs/aodomainao.crt /etc/ssl/private/aodomainao.key /etc/ssl/private/ta.aodomainao.key 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') OpenVPN: backup done" >> $LOGTMP
 
 # PHP
-echo "$(date +'%H:%M:%S') PHP: backup files ..." >> $LOG
-tar -zcf php.tar.gz /etc/php/8.2/apache2/php.ini /etc/php/8.2/fpm/php.ini /etc/php/8.2/cli/php.ini 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') PHP: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') PHP: backup files ..." >> $LOGTMP
+tar -zcf php.tar.gz /etc/php/8.2/apache2/php.ini /etc/php/8.2/fpm/php.ini /etc/php/8.2/cli/php.ini 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') PHP: backup done" >> $LOGTMP
 
 # PostgreSQL
-echo "$(date +'%H:%M:%S') PostgreSQL: backup files ..." >> $LOG
-tar -zcf postgresql.tar.gz /etc/postgresql/15/main/postgresql.conf 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') PostgreSQL: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') PostgreSQL: backup files ..." >> $LOGTMP
+tar -zcf postgresql.tar.gz /etc/postgresql/15/main/postgresql.conf 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') PostgreSQL: backup done" >> $LOGTMP
 
 # Redis
-echo "$(date +'%H:%M:%S') Redis: backup files ..." >> $LOG
-tar -zcf redis.tar.gz /etc/redis/redis.conf 2>&1 >> $LOG
-echo "$(date +'%H:%M:%S') Redis: backup done" >> $LOG
+echo "$(date +'%H:%M:%S') Redis: backup files ..." >> $LOGTMP
+tar -zcf redis.tar.gz /etc/redis/redis.conf 2>&1 >> $LOGTMP
+echo "$(date +'%H:%M:%S') Redis: backup done" >> $LOGTMP
 
 # OS changes - begin of script
 cat << EOF > /backup/today/os_changes.sh
@@ -260,28 +259,33 @@ cd /backup/today
 # OS changes - end of script
 
 # Remove write access on today directory and log file
-echo "$(date +'%H:%M:%S') remove write access on today directory and log file" >> $LOG
-chmod 755 /backup/today 2>&1 >> $LOG
-chmod 600 $LOG 2>&1 >> $LOG
+echo "$(date +'%H:%M:%S') remove write access on today directory and log file" >> $LOGTMP
+chmod 755 /backup/today 2>&1 >> $LOGTMP
 
 # End the maintenance mode for Nextcloud
-echo "$(date +'%H:%M:%S') Nextcloud: turn Maintenance-Mode OFF" >> $LOG
-sudo -u www-data php /var/www/ncdirectorync/occ maintenance:mode --off 2>&1 >> $LOG
+echo "$(date +'%H:%M:%S') Nextcloud: turn Maintenance-Mode OFF" >> $LOGTMP
+sudo -u www-data php /var/www/ncdirectorync/occ maintenance:mode --off 2>&1 >> $LOGTMP
 
 # Restore cron jobs for www-data
-echo "$(date +'%H:%M:%S') User www-data: restore cron jobs" >> $LOG
-crontab -u www-data /backup/today/www-data.cron.backup 2>&1 >> $LOG
+echo "$(date +'%H:%M:%S') User www-data: restore cron jobs" >> $LOGTMP
+crontab -u www-data /backup/today/www-data.cron.backup 2>&1 >> $LOGTMP
 
 cd /root
 
 # Change today directory name to YYMMDD
-echo "$(date +'%H:%M:%S') directory today becomes $STARTDATE" >> $LOG
-mv /backup/today /backup/$STARTDATE 2>&1 >> $LOG
+echo "$(date +'%H:%M:%S') directory today becomes $STARTDATE" >> $LOGTMP
+mv /backup/today /backup/$STARTDATE 2>&1 >> $LOGTMP
+cp $LOGTMP /backup/$STARTDATE/$STARTTIME-$(date +'%H%M').log
 
 # Un-mount backup device
-echo "$(date +'%H:%M:%S') Device: unmount ..." >> /tmp/backup_system_$START.out
+echo "$(date +'%H:%M:%S') Device: unmount ..." >> $LOGTMP
 umount /backup
-echo "$(date +'%H:%M:%S') Device: unmount done" >> /tmp/backup_system_$START.out
+echo "$(date +'%H:%M:%S') Device: unmount done" >> $LOGTMP
+
+# Send log file
+#gpg --recipient aoadmin@addressao --sign --armor --output $LOGTMP.asc --encrypt $LOGTMP
+#mail aoadmin@addressao < $LOGTMP.asc
+mail aoadmin@addressao < $LOGTMP
 ```
 
 ## Backup TEST

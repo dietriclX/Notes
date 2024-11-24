@@ -54,14 +54,16 @@ At the end, I decided to go with the following "Basis" setup.
 Independent of the instance.
 
 - Users
-	- User: `aosysuserao`
-	- Email: `aoadmin@addressao` (e.g. "user@example.com")
-	- Phone Region: `aophoneregionao` (e.g. "DE")
+  - `root`
+  	- Email: `aosystem@addressao` (e.g. "user@example.com")
+  - System User
+    - Account: `aosysuserao`
+- System
+	- Host name: `nchostnc`
+  - Phone Region: `aophoneregionao` (e.g. "DE")
   - Time Zone: `aotimezoneao` (e.g. "Europe/Amsterdam")
 - Router
 	-  Local IP address: `aorouteraddressao` (e.g. 10.0.0.1)
-- Host
-	- Host name: `nchostnc`
 - Web-Server
 	- Full Qualified Domain Name (FQDN) `aodomainao`
 	- SSL via own Certificate Authority (CA)
@@ -100,6 +102,7 @@ The active Instance of the Office Solution.
 	- database name `ctdatabasect`
 	- database owner `ctdboct`
 	- database owners password `ctdbopasswordct`
+  - secret `ctsecretct`
 	- public server name `ctserverct`
 	- URL: `https://ctserverct.aodomainao`
 
@@ -1352,7 +1355,7 @@ no-stdout-log
 
 fingerprint
 use-auth-secret
-static-auth-secret=215f6146b6ed6446bd6c093af4911b34ba1b3e36bc3b0dbc662384e29edd6ee6
+static-auth-secret=ctsecretct
 total-quota=100
 bps-capacity=0
 stale-nonce=600
@@ -1387,7 +1390,7 @@ no-stdout-log
 
 fingerprint
 use-auth-secret
-static-auth-secret=<your secret>
+static-auth-secret=ctsecretct
 total-quota=100
 bps-capacity=0
 stale-nonce=600
@@ -1926,9 +1929,29 @@ At any point in time, you are able to update the Nextcloud-Apps from command lin
 
 Open URL `https://aodomainao/`. That way you a.) verify that the communication to the Internet is working and b.) will be able to enter the missing parameters.
 
-## Nextcloud configuration
+#### Email-Account (System)
 
-### App-Install Banner
+As Administrator
+
+- 🪜 open a "**New private window**", in the web browser
+	- 🪜 open URL `https://aodomainao`
+		- 🪜 login with the administrator account `ncadminnc`
+			- 🪜 select "**Administration settings**" from the menu
+				- 🪜 select "Basic settings" in the left panel
+					- ✓✏️ fill aout the "**Email server**" settings for `aosystem@addressao`
+					- ✓ click on "**Save**"
+
+#### Email-Account (Administrator)
+
+As Administrator
+
+- 🪜 open a "**New private window**", in the web browser
+	- 🪜 open URL `https://aodomainao`
+		- 🪜 login with the administrator account `ncadminnc`
+			- 🪜 select "Personal info" in the left panel
+				- ✏️ enter `aoadmin@addressao` in field "**Email**"
+
+#### App-Install Banner
 
 Are you annoyed as well, when each web-site ask you to install their app. Even worst if it is your own. For iOS this banner can be de-activated using SQL Statement `INSERT INTO oc_appconfig(appid,configkey,configvalue) VALUES ('theming', 'iTunesAppId', '');`.
 
@@ -1958,7 +1981,7 @@ ncdatabasenc=> select * from oc_appconfig where appid = 'theming';
 (11 rows)
 ```
 
-### Client Push (notify_push)
+#### Client Push (notify_push)
 
 With Client Push installed as Nextcloud App, the Client Push service is neither installed, enabled nor configured. To get the service setup properly the following steps are required.
 
@@ -2016,7 +2039,7 @@ Setup the configuration.
 # 
 ```
 
-### ONLYOFFICE
+#### ONLYOFFICE
 
 First, identify the `<Secret key>` from the `local.json` file (see below).
 
@@ -2025,7 +2048,7 @@ As Administrator
 - 🪜 open a "**New private window**", in the web browser
 	- 🪜 open URL `https://aodomainao`
 		- 🪜 login with the administrator account `ncadminnc`
-			- 🪜 select "**Adiministration settings**" from the menu
+			- 🪜 select "**Administration settings**" from the menu
 				- 🪜 select "ONYLOFFICE" in the left panel
 					- ✓✏️ enter the configuration for the "ONLYOFFICE" app
 					- ✓ click on "**Save**"
@@ -2087,9 +2110,27 @@ Configuration of "ONLYOFFICE" app:
 :
 ```
 
-### Talk (spreed)
+#### Talk (spreed)
 
-tbd
+As Administrator
+
+- 🪜 open a "**New private window**", in the web browser
+	- 🪜 open URL `https://aodomainao`
+		- 🪜 login with the administrator account `ncadminnc`
+			- 🪜 select "**Administration settings**" from the menu
+				- 🪜 select "Talk" in the left panel
+          - scroll down to "**STUN servers**" section
+					- ✏️ enter `ctserverct.aodomainao:5249` in field "**stun**"
+          - scroll down to "**TURN servers**" section
+					- ✏️ select "turns: only"
+          - ✏️ enter `ctserverct.aodomainao:5249` in field "**TURN server URL**"
+          - ✏️ enter `ctsecretct` in field "**TURN server secret**"
+					- ✏️ select "UDP and TCP"
+          - click on "**Add a new TURN server**"
+					- ✏️ select "turns: only"
+          - ✏️ enter `ctserverct.aodomainao:443` in field "**TURN server URL**"
+          - ✏️ enter `ctsecretct` in field "**TURN server secret**"
+					- ✏️ select "TCP only"
 
 ## DSL-Router
 
@@ -2198,6 +2239,47 @@ At anytime you can disable the App and everyone has to login like before. Howeve
 
 ```console
 sudo --user=www-data php /var/www/ncdirectorync/occ app:disable user_saml
+```
+
+## Email for root
+
+It might be usefully, for later usage, to send emails as `root` user. Like sending a status report to administrator.
+
+### Prepare - Sending
+
+First install the software packages, required to send out emails. During the process, answer the question `Enable AppArmor support?` with `Yes`.
+To configure the sending of emails, you have to define the `msmtprc` and `mail.rc` files.
+Make sure that the configuration of the STMP server and email account fits to your setup.
+
+```console
+apt install -y msmtp msmtp-mta mailutils
+touch /etc/msmtprc
+chmod 600 /etc/msmtprc
+```
+
+Later, the command `mail aoadmin@addressao < AnyFile` can be used to send any file to the administrator or other users.
+
+=== `/etc/msmtprc` ===
+
+```code
+# Default values for all accounts.
+defaults
+port 587
+tls on
+account root
+host <SMTP server address of email provider>
+from aosystem@addressao
+auth on
+user aosystem@addressao
+password <password for email account aosystem@addressao>
+# Set a default account
+account default : root
+```
+
+=== `/etc/mail.rc` ===
+
+```code
+set sendmail="/usr/bin/msmtp -t"
 ```
 
 ## Let's encrypt
