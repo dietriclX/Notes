@@ -154,3 +154,67 @@ server {
   }
 }
 ```
+
+## Issue - installed onlyoffice-documentserver package post-installation script subprocess returned error exit status 1
+
+### Symptom
+
+As Administrator:
+
+During the update of the package `onlyoffice-documentserver` an error occurs, at the post-installation script. A look into the journal (`journalctl`) reveals that - again - nginx wants to listen on port `80`.
+
+```code
+:
+Stopping documentserver services...
+Unpacking onlyoffice-documentserver (8.2.2-22) over (8.2.1-38) ...
+Setting up onlyoffice-documentserver (8.2.2-22) ...
+Installing new version of config file /etc/onlyoffice/documentserver/nginx/includes/ds-docservice.conf ...
+Generating AllFonts.js, please wait...Done
+Generating presentation themes, please wait...Done
+Generating js caches, please wait...Done
+Installing plugins, please wait...Done
+dpkg: error processing package onlyoffice-documentserver (--configure):
+ installed onlyoffice-documentserver package post-installation script subprocess returned error exit status 1
+Processing triggers for libc-bin (2.36-9+deb12u9) ...
+Errors were encountered while processing:
+ onlyoffice-documentserver
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+```
+
+```code
+:
+... systemd[1]: Starting nginx.service - A high performance web server and a reverse proxy server...
+... nginx[114244]: 2024/11/28 18:21:32 [info] 114244#114244: Using 116KiB of shared memory for nchan in /etc/nginx/nginx.conf:61
+... nginx[114244]: 2024/11/28 18:21:32 [info] 114244#114244: Using 131072KiB of shared memory for nchan in /etc/nginx/nginx.conf:61
+... nginx[114249]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+... nginx[114249]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+... nginx[114249]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+... nginx[114249]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+... nginx[114249]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+... nginx[114249]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+... nginx[114249]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+... nginx[114249]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+... nginx[114249]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+... nginx[114249]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+... nginx[114249]: nginx: [emerg] still could not bind()
+... systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+... systemd[1]: nginx.service: Failed with result 'exit-code'.
+... systemd[1]: Failed to start nginx.service - A high performance web server and a reverse proxy server.
+:
+```
+
+### Notes
+
+This happened when the `onlyoffice-documentserver` package comes with an update of the nginx configuration. 
+
+### Solution / Work-Around
+
+Run the configuration of the package again, this time with Apache being shutdown. Once done, modify the `ds.conf` file and (re-)start both web servers.
+
+```console
+systemctl stop apache2
+dpkg --configure onlyoffice-documentserver
+sed -i -e "s/listen 0\.0\.0\.0\:80;/listen 0.0.0.0:8080;/" -e "s/listen \[::\]:80 /listen \[::\]:8080 /" /etc/onlyoffice/documentserver/nginx/ds.conf
+systemctl restart nginx
+systemctl start apache2
+```

@@ -975,6 +975,12 @@ Unfortunately `nginx` is tightly bound with the ONLYOFFICE installation. I first
 
 In file `ds.conf` replace the port definition from `80` to `8080`.
 
+Note: Have not figured out yet, if the same step is required for each update of ONLYOFFICE. See also section "Issues" to handle issues during update.
+
+```console
+sed -i -e "s/listen 0\.0\.0\.0\:80;/listen 0.0.0.0:8080;/" -e "s/listen \[::\]:80 /listen \[::\]:8080 /" /etc/onlyoffice/documentserver/nginx/ds.conf
+```
+
 === `/etc/onlyoffice/documentserver/nginx/ds.conf` ===
 
 ```code
