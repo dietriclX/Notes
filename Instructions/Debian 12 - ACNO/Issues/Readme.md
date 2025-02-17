@@ -98,6 +98,27 @@ apt install imagemagick
 
 # ONLYOFFICE
 
+## Issue - Error when trying to connect: Administrator > "Save" settings
+
+### Symptom
+
+As Administrator:
+
+In menu "Adiministration settings > ONLYOFFICE", unable to "Save" changes. Getting error message
+
+```code
+Error when trying to connect (Error occurred in the document service: Error while downloading the document file to be converted.) (version 8.2.2.22)
+```
+
+### Notes
+
+Happens, when "**ONLYOFFICE Docs address**" is referring to "https://ooserveroo.aohostao". The key point is "aohostao".
+The server name cannot be resolved in the local network. The host IP-Address of "aohostao", but not for "ooserveroo.aohostao".
+
+### Solution
+
+n/a
+
 ## Issue - nginx 403: User > open document / Administrator > "Save" settings
 
 ### Symptom
