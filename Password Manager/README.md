@@ -1,8 +1,22 @@
+# Use-Cases
+
+## Email Encryption [GnuPG / PGP](../Instructions/Debian%2012%20-%20GnuPG%20(PGP)/)
+
+Where else, if not in a Password Manager, would you store such a thing like a Passphrase?
+
+Using KeePass, the "**Auto-Type**" feature is quiet handy. A press of CTRL+V is enough to paste the Passphrase into the application or Terminal.
+
+1. navigate to tab "**Entry**"
+2. maintaine the Passphrase in field "**Password**"
+3. navigate to tab "**Auto-Type**"
+4. enable option "**Override default sequence**"
+4. enter `{PASSWORD}{ENTER}` in the field below
+
 # Quick Test on Algorithm supported by Mobile APPs
 
 I wanted to know, if there are limitations on KeePass apps. Something that KeePass2 is capable of. I was focusing on mobile apps freely available, which might fit my needs.
 
-Unfortunately my prefered app has a general problem with Argon2id :-(
+Unfortunately my preferred app has a general problem with Argon2id :-(
 
 BTW
 *Why on earth is the key file in an XML format?*
@@ -13,10 +27,9 @@ BTW
 | Test Nr. | Application | Version | Mobile OS | AES/Rijndael & AES-KDF | ChaCha & AES-KDF | AES/Rijndael & Argon2d | ChaCha & Argon2d | AES/Rijndael & Argon2id | ChaCha & Argon2id | 
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | 
 | 1 | AuthPass | 1.9.11 | Android 10 | Ok | Ok | Ok | Ok | Failed | Failed |
-| 2 | AuthPass | 1.9.10 | iOS 15 | Ok | Ok | Ok | Ok | Failed | Failed |
+| 2 | AuthPass | 1.9.11 | iOS 15 | Ok | Ok | Ok | Ok | Failed | Failed |
 | 3 | KeePass2Android | 1.09e-r7 | Android 10 | Ok | Ok | Ok | Ok | Ok | Ok |
 | 4 | KeePassium | v1.46.140 | iOS 15 | Ok | Ok | Ok | Ok | Ok | Ok |
-
 
 ## Test Scenario
 
@@ -29,7 +42,6 @@ BTW
 
 repeat steps 2. - 6. for all databases
 
-
 ## Test Preparation
 
 The following databases were created using "KeePass Password Safe" Version 2.47 (64-bit) on Linux.
@@ -39,7 +51,6 @@ For each database, ...
 - Master Password: qqq
 - Database file compressed with GZip
 - Key File "2.0_256bits.keyx" (created with the same application, as Version 2.0 with 256bits)
-
 
 ### The important properties ... similarities/differences
 
@@ -54,7 +65,7 @@ For each database, ...
 	- Interations: 60000
 
 #### Password File "DatabaseC.kdbx"
-- Database file encryption algorithm: ChaCha AES/Rijndael (256-bit key, FIPS 197)
+- Database file encryption algorithm: AES/Rijndael (256-bit key, FIPS 197)
 - Key derivation function: Argon2d
 	- Interations: 2
 	- Memory: 64 MB
@@ -62,27 +73,25 @@ For each database, ...
 
 #### Password File "DatabaseD.kdbx"
 
-- Database file encryption algorithm: ChaCha AES/Rijndael (256-bit key, FIPS 197)
+- Database file encryption algorithm: ChaCha (256-bit key, FIPS 197)
 - Key derivation function: Argon2d
 	- Interations: 2
 	- Memory: 64 MB
 	- Parallelism: 2
 
 #### Password File "DatabaseE.kdbx"
-- Database file encryption algorithm: ChaCha AES/Rijndael (256-bit key, FIPS 197)
+- Database file encryption algorithm: AES/Rijndael (256-bit key, FIPS 197)
 - Key derivation function: Argon2id
 	- Interations: 2
 	- Memory: 64 MB
 	- Parallelism: 2
 
 #### Password File "DatabaseF.kdbx"
-- Database file encryption algorithm: ChaCha AES/Rijndael (256-bit key, FIPS 197)
+- Database file encryption algorithm: ChaCha (256-bit key, FIPS 197)
 - Key derivation function: Argon2id
 	- Interations: 2
 	- Memory: 64 MB
 	- Parallelism: 2
-
-
 
 ## Addendum
 

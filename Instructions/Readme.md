@@ -37,13 +37,13 @@ The `<` and `>` is a kind of a placehold. It indicates that at this place, you h
 
 ##### User activity
 
-🪜 \<action\>
+⬆ \<action\>
 
 - You have to \<action\>, which brings you to the "\<title\>" settings.
 
 In case of Android Smartphone, where in the "Settings" of the device, you are instructed to tap on the option "About phone".
 
-🪜 tap on "**About phone**"
+⬆ tap on "**About phone**"
 
 - You have to tap on "**About phone**", which brings you to the "About phone" settings.
 
@@ -82,11 +82,11 @@ Same in regards to a menu, with the special format when it comes to Sub-Menu ent
 
 #### Navigation
 
-🪜 \<action\>
+⬆ \<action\>
 
 - You have to \<action\> to get to another dialog/page.
 
-🛝 \<action\>
+🔙 \<action\>
 			
 - You have to \<action\> to navigate backwards to the previous dialog/page.
 
@@ -96,13 +96,13 @@ Same in regards to a menu, with the special format when it comes to Sub-Menu ent
 
 - You have to do \<action\>, which results in an immediate change.
 
-✔️✏️ \<action\>
+✏️✓ \<action\>
 
 - You have to do \<action\>, which results in a change once confirmed by you.
 
-✔️ \<action\>
+✓ \<action\>
 
-- You have to do \<action\> which confirms all changes (✔️✏️ \<action\>) above.
+- You have to do \<action\> which confirms all changes (✏️✓ \<action\>) above.
 
 #### Actions
 

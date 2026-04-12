@@ -1,14 +1,32 @@
-_Note: Replace "USERID" by your user-name._
+# [Debian 13 - Desktop Laptop](../../Readme.md) > Boot Manager
 
-# Customization
+From [GitHub: dietriclX/Notes](https://github.com/dietriclX/Notes) based on [License](https://github.com/dietriclX/Notes/blob/main/LICENSE).
 
-Note: Don't use the `grub-customizer` ... it will make so many changes, that the GRUB configuration is no longer Debian "compatible".
+- The Workstation
+  - Software
+  	- OS: Debian 13 "trixie"
+  - OS Users
+    - Regular User
+      - Account: `dlsysuserdl`
 
+## GRUB
 
+### Customization
 
-# GRUB
+Note: *Don't use the `grub-customizer` ... it will make so many changes, that the GRUB configuration is no longer Debian "compatible".*
 
-## Repair Boot Manager (e.g. after Windows installation)
+### Background Image
+
+Default image is `/usr/share/images/desktop-base/desktop-grub.png`.
+
+Remove it, by adding the following lines in `/etc/default/grub` 
+
+```code
+# Specify Background image (or "" for none)
+GRUB_BACKGROUND=""
+```
+
+### Repair Boot Manager (e.g. after Windows installation)
 
 Use a Debian Live CD to get a system running, for the execution of the following commands.
 
@@ -36,9 +54,6 @@ update-grub
 
 Based on [debian / wiki / GrubEFIReinstall](https://wiki.debian.org/GrubEFIReinstall)
 
-
-## Debian 12 - Configuration
-
 ### Waiting-Time
 
 Default image is "5" seconds.
@@ -49,24 +64,42 @@ Can be changed in `/etc/default/grub` in the line ...
 GRUB_TIMEOUT=4
 ```
 
-### Background Image
+### Scenario: Hide GRUB Menu
 
-Default image is `/usr/share/images/desktop-base/desktop-grub.png`.
+Hide the GRUB menu during boot time and use no background.
 
-Remove it, by adding the following lines in `/etc/default/grub` 
+Note: *Keep the SHIFT key press right after start, in order to access the boot menu.*
+
+```console
+cp /etc/default/grub /etc/default/grub.ORG
+sed --in-place --expression="s/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0\nGRUB_TIMEOUT_STYLE=hidden/" /etc/default/grub
+cat << EOF >> /etc/default/grub
+
+# Specify Background image (or "" for none)
+GRUB_BACKGROUND=""
+EOF
+update-grub
+```
+
+=== `/etc/default/grub` (modified) ===
 
 ```code
+:
+GRUB_TIMEOUT=0
+GRUB_TIMEOUT_STYLE=hidden
+:
+
 # Specify Background image (or "" for none)
 GRUB_BACKGROUND=""
 ```
 
-### Theme "[OldBIOS](https://www.gnome-look.org/p/2072033)"
+### Scenario: "[OldBIOS](https://www.gnome-look.org/p/2072033)" Theme
 
 Download archive `OldBIOS.zip` and extract it into the Download folder.
 
 ```console
 mkdir /boot/grub/themes
-mv /home/USERID/Downloads/OldBIOS /boot/grub/themes
+mv /home/dlsysuserdl/Downloads/OldBIOS /boot/grub/themes
 chown -R root:root /boot/grub/themes/OldBIOS
 ```
 
@@ -85,7 +118,7 @@ In addition of having the GRUB menu looking like a BIOS, you can make it even mo
 by using the font "[InsydeH2O Setup Utility](https://fontstruct.com/fontstructions/show/2186015)" in a 1024x768 screen resolution.
 
 1. download the archive "insydeh2o-setup-utility.zip" of the font "[InsydeH2O Setup Utility](https://fontstruct.com/fontstructions/show/2186015)" and extract the archive in the Download folder.
-2. convert the font into an PFF2 formated font file, using command: `grub-mkfont --size=16 --output=insydeh2o_regular_16.pf2 "/home/USERID/Downloads/insydeh2o-setup-utility/insydeh2o-setup-utility.ttf"`
+2. convert the font into an PFF2 formated font file, using command: `grub-mkfont --size=16 --output=insydeh2o_regular_16.pf2 "/home/dlsysuserdl/Downloads/insydeh2o-setup-utility/insydeh2o-setup-utility.ttf"`
 3. copy the newly created file "insydeh2o_regular_16.pf2" into the directory `/boot/grub/themes/OldBIOS/f`
 4. in file `OldBIOS/theme.txt` replace `Mbytepc230 Regular 16` and `MBytePC230 Regular 16` by `InsydeH2O Setup Utility Regular 16`
 5. add the following two lines to `/etc/default/grub`

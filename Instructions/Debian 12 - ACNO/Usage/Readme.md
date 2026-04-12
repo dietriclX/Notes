@@ -11,10 +11,22 @@ After the installation some activities are handy to have documented.
 sudo -u www-data php ncwebdirectorync/occ maintenance:mode --on
 ```
 
+#### Script
+
+```console
+~/script/acno/maintenance.sh on
+```
+
 ### Maintenance-Mode OFF
 
 ```console
 sudo -u www-data php ncwebdirectorync/occ maintenance:mode --off
+```
+
+#### Script
+
+```console
+~/script/acno/maintenance.sh off
 ```
 
 ## Start
@@ -26,6 +38,12 @@ systemctl start postgresql redis
 systemctl start apache2 coturn ds-converter ds-docservice ds-metrics nginx php8.2-fpm
 ```
 
+### Script
+
+```console
+~/script/acno/units.sh --up
+```
+
 ## Stop
 
 Manually stopping all instances of a Nextcloud installation.
@@ -33,6 +51,12 @@ Manually stopping all instances of a Nextcloud installation.
 ```console
 systemctl stop apache2 coturn ds-converter ds-docservice ds-metrics nginx php8.2-fpm
 systemctl stop postgresql redis
+```
+
+### Script
+
+```console
+~/script/acno/units.sh --down
 ```
 
 ## OpenVPN
@@ -43,159 +67,18 @@ Access the Management Interface
 telnet localhost 7505
 ```
 
-# `scripts` Directory
-
-The directory contains a few helpful files to assist you in setting up and maintaining the system.
-
-At one place, you specify the values for the Parameters in the `prepare_machine.*.sh` file(s). Allowing the information to be used during the setup (translate `Readme.md`) and the days after when everything is running (e.g. `variables.sh`, `backup.sh`, ...).
-
-Using the `apply.sh` script, your values will be applied to any file. Making any document easier to read and the commands - in the same - tailored to your settings, just like for any shell script.
-
-The `backup.sh` script is for the cron job to every night and create a backup on an external USB HDD. With every backup a `restore.sh` is generated to simplify and speed-up the restore operation.
-
-## The Directory Itself
-
-Download the content of directory [Debian 12 - ACNO > Usage > scripts](./scripts) onto your machine `aohostao`. Put it into the root home directory `/root/scripts/acno`.
-
-Directory `~/scripts/acno`
-
-| File | Description |
-| :--- | :--- |
-| `apply.sh` | applies the values for Parameters in any kind of file |
-| `backup.sh` | automated script for being called from a cron job |
-| `prepare_machine.ORG.sh` | prepares a newly setup machine |
-| `variables.sh` | this file has to be generated |
-
-Directory `~/scripts/acno/data`
-
-| File | Description |
-| :--- | :--- |
-| `parameter_value.Default.map` | default values for the Parameters |
-| `parameter_value.MIN.map` | absolute minimum of what you have to specify |
-| `parameter_value.PROD.map` | minimum of what you have to specify for a production system |
-| `variables.ORG.sh` | kind of translation from Parameters to environment variables and the basis of `variables.sh` |
-
-Make sure the shell scripts have the "x" attribute set and all files can only read/(over-)written by root.
-
-```console
-chmod 700 ~/scripts/acno/*.sh
-chmod 600 ~/scripts/acno/data/*
-```
-
-## The Parameter-Value Mapping
-
-In the `data` directory you will find those `parameter_value.*.map` files, which are used to specify the values for the various Parameters. The `apply.sh` script uses these files for the translation.
-
-The `parameter_value.*.map` files can be used in two flavours. Were as Variant B.) can be used as well by those who want to maintain only the bare minimunm.
-
-A.) For a single machine with not backup machine.
-
-You need only file `parameter_value.Default.map`.
-Translation can be done using command e.g. `apply.sh file`. Option `-i TYPE`/`--instance=TYPE` is not used.
-
-B.) For a single machine with backup machine available.
-
-You maintain in file `parameter_value.Default.map` everything which all machines have in common. In another file e.g. `parameter_value.PROD.map` you would maintain what specific to the PROD machine.
-Translation can be done using command e.g. `apply.sh --instance=PROD file`
-
-For those in a hurry, would maintain their specifici values in file `parameter_value.MIN.map`
-Translation can be done using command e.g. `apply.sh --instance=MIN file`
-
-Note: The option `-i TYPE`/`--instance=TYPE` is doing nothing else than using `parameter_value.TYPE.map` in addition to `parameter_value.Default.map`.
-
-Note: It is on you, to maintain the Parameter-Value-Mapping in these files, as it is environment specific and mission critical! Especially in regards to the backup script.
-
-The format of these `.map` files is self-explanatory. Take for example the backup device mount point aka `aomountdirdeviceao`.
-
-=== `data/parameter_value.Default.map` ===
-
-```code
-:
-
-# Backup: Directory aka Mount Point
-aomountdirdeviceao   /mnt/backup
-
-:
-```
-
-## The Shell-Scripts
-
-### `apply.sh`
-
-The `apply.sh` is the shell script to apply the Parameter-Value-Mapping to the scripts or other files e.g. a `Readme.md` file.
-
-Before you start any other shell script of the `scripts` directory, the `.map` file(s) to `variables.ORG.sh`.
-
-With only `parameter_value.Default.map` maintained.
-
-```console
-cd ~/scripts/acno
-./apply.sh variables.ORG.sh variables.sh
-```
-
-With both files `parameter_value.Default.map` and `parameter_value.MIN.map` maintained.
-
-```console
-cd ~/scripts/acno
-./apply.sh --instance=MIN variables.ORG.sh variables.sh
-```
-
-Note: If `apply.sh` gets started without any Parameters or with incorrect Parameter(s), the script prints out the usage information. In case you are getting the information `usage: applygnupgdefaults` ... you haven't started the shell script `apply.sh`  ... at least that happened to me :) ... well, well, that happens if the current directory is not part of `PATH` ... keep it that way! And do not add `~/scripts/acno` to `PATH` ... as soon as you have the `scripts` directory on your backup device, you could get wiered results! Trust me ...
-
-### `backup.sh` 
-
-The `backup.sh` is the shell script you want to call in your daily/nightly cron job. The script relies on an up-to-date version of `variables.sh`.
-
-### `download.sh`
-
-???
-
-### `prepare_machine.sh`
-
-The `prepare_machine.sh` script can be used to prepare a fresh machine¹, to apply afterwards the `restore.sh` shell script (generated by the `backupo.sh` script).
-
-¹ With regards to [Setup > Readme.md](../Setup/Readme.md), only the Debian system has been installed (as described) and no "**Post activities**" were started.
-
-Note: The shell script `prepare_machine.sh` would be started on a fresh machine using the backup device. That might require to adjust some of the Parameters values, results in updating the Parameter-Value-Mapping file(s) (`.map`) and at the end "updating" the shel script `variables.sh`.
-
-### `restore.sh`
-
-Does not exist ... yet. This script gets created by the `backup.sh`.
-
-Note: The shell script `restore.sh` would be started on a well prepared machine using the backup device. That might require to adjust some of the Parameters values, results in updating the Parameter-Value-Mapping file(s) (`.map`) and at the end "updating" the shel script `variables.sh`.
-
-### `upload.sh`
-
-The `upload.sh` shell script gets called by the `backup.sh` script, in case the feature Backup to WebDAV is enabled.
-
-Note: I had used this feature several times. The upload to another Nextcloud instance (from a Telcom) was never successfull. Even checking after upload and re-upload was not reliably working.
-
-### `variables.ORG.sh`
-
-The shell script `variables.ORG.sh` is nothing more than a list of various environment variables mapped to the corresponding Parameter.
-
-Take for example the backup device mount point aka `aomountdirdeviceao` and its equivalent environment variable `MNT_DIR_DEVICE`.
-
-=== `data/variables.ORG.sh` ===
-
-```console
-:
-MNT_DIR_DEVICE=aomountdirdeviceao
-:
-```
-
 ## Backup
 
-### Prepare `aomountdirdeviceao` Directory
+### Prepare `aomountdirbackupao` Directory
 
-Make sure you have always a disk attached to the server `aohostao`. In this example it is `/dev/sda`, whose first partition will be mounted on `aomountdirdeviceao`.
+Make sure you have always a disk attached to the server `aohostao`. In this example it is `/dev/sdb`, whose first partition will be mounted on `aomountdirbackupao`.
 
 ```console
-# mkdir --mode=770 aomountdirdeviceao
-# chown root:backup aomountdirdeviceao
-# mount /dev/sdb1 aomountdirdeviceao
-# chown root:backup aomountdirdeviceao
-# ls aomountdirdeviceao
+mkdir --mode=770 aomountdirbackupao
+chown root:backup aomountdirbackupao
+mount /dev/sdb1 aomountdirbackupao
+chown root:backup aomountdirbackupao
+ls aomountdirbackupao
 lost+found
 ```
 
@@ -214,7 +97,7 @@ PATH      TYPE MOUNTPOINT UUID
 /dev/sdb1 part            bb09a4f1-fa6a-435b-b1f5-0c1db8bb8c2f
 ```
 
-Next is to add a line in `fstab` (above `tmpfs` entries) for this particular device, for mount point `aomountdirdeviceao` with the attribute `noauto` to prevent a mount at boot time.
+Next is to add a line in `fstab` (above `tmpfs` entries) for this particular device, for mount point `aomountdirbackupao` with the attribute `noauto` to prevent a mount at boot time.
 
 === `/etc/fstab` ===
 
@@ -222,20 +105,20 @@ Next is to add a line in `fstab` (above `tmpfs` entries) for this particular dev
 :
 
 # Backup devices
-UUID=bb09a4f1-fa6a-435b-b1f5-0c1db8bb8c2f aomountdirdeviceao         ext4    noauto,errors=remount-ro 0       2
+UUID=bb09a4f1-fa6a-435b-b1f5-0c1db8bb8c2f aomountdirbackupao         ext4    noauto,errors=remount-ro 0       2
 
 :
 ```
 
 ### Setup cron job
 
-Before you enable the scron job using the `backup.sh` shell script, you have to test/execute the script with all the up-to-date Parameter-Value-Mapping `.map` file(s) (and depending `.sh`files`).
+Before you enable the cron job using the `nightly_maintenance.sh` shell script, you have to test/execute the script with all the up-to-date Parameter-Value-Mapping `.map` file(s) (and depending `.sh` files`).
 
-Once the `backup.sh` shell script works as expected, it can be executed every night at 01:15 . Simply insert the following lines into crontab for root (command `crontab -e`).
+Once the `nightly_maintenance.sh` shell script works as expected, it can be executed every night at 01:15 . Simply insert the following lines into crontab for root (command `crontab -e`).
 
 ```code
 # --- START OF ACNO SPECIFIC DEFINITIONS --- #
-15 1 * * * /root/scripts/acno/backup.sh
+15 1 * * * /root/scripts/acno/nightly_maintenance.sh
 ```
 
 *Note: The internet offers a variety of tools to help with cron job scheduling. For example [Cronitor](https://crontab.guru)*
@@ -255,8 +138,8 @@ Even if the restore is labor intensive ... do not forget to setup on the new mac
 Take a look at the latest backup...
 
 ```console
-# mount aomountdirdeviceao
-# cd aomountdirdeviceao
+# mount aomountdirbackupao
+# cd aomountdirbackupao
 # ls <backup date>
 apache2.tar.gz	coturn.tar.gz  ctdatabasect.pgsql  ncdatabasenc.pgsql  nextcloud.tar.gz  nginx.tar.gz  onlyoffice.tar.gz  oodatabaseoo.pgsql  osandco.tar.gz  os_changes.sh  php.tar.gz  postgresql.tar.gz  redis.tar.gz  var_log.tar.gz  www-data.cron.backup
 ```
@@ -344,31 +227,29 @@ Basically you do the following
 #### Variant A
 
 ```console
-cd ncwebdirectorync
-cd ..
+cd tmp
 git clone  --single-branch --recurse-submodules --shallow-submodules --branch=v30.0.4 --depth 1 https://github.com/nextcloud/server.git
-sudo --user=www-data php ncwebdirectorync/occ maintenance:mode --on
-systemctl stop apache2 php8.2-fpm notify_push coturn nginx ds-converter ds-metrics ds-docservice
-mv ncwebdirectorync ncwebdirectorync.BAK
-mv server ncwebdirectorync
-cd ncwebdirectorync.BAK
-cp config/config.php ncwebdirectorync/config
+cd ncwebdirectorync
+cp config/config.php /tmp/server/config
 cd apps
 echo Take over Nextcloud Apps
 ls --directory * | while read d
 do
-  if [ ! -d "ncwebdirectorync/apps/$d" ]; then
+  if [ ! -d "/tmp/server/apps/$d" ]; then
     echo $d
-    cp --recursive "$d" "ncwebdirectorync/apps"
+    cp --recursive "$d" "/tmp/server/apps"
   fi
 done
-chown --recursive --no-dereference www-data:www-data ncwebdirectorync
-find ncwebdirectorync/ -type d -exec chmod 750 {} \;
-find ncwebdirectorync/ -type f -exec chmod 640 {} \;
-chmod 740 ncwebdirectorync/apps/notify_push/bin/x86_64/notify_push
+chown --recursive --no-dereference www-data:www-data /tmp/server
+find /tmp/server/ -type d -exec chmod 750 {} \;
+find /tmp/server/ -type f -exec chmod 640 {} \;
+chmod 740 /tmp/server/apps/notify_push/bin/x86_64/notify_push
+sudo --user=www-data php ncwebdirectorync/occ maintenance:mode --on
+systemctl stop apache2 php8.2-fpm notify_push coturn nginx ds-converter ds-metrics ds-docservice
+mv ncwebdirectorync ncwebdirectorync.BAK
+mv /tmp/server ncwebdirectorync
 systemctl start apache2 php8.2-fpm notify_push coturn nginx ds-converter ds-metrics ds-docservice
 sudo --user=www-data php ncwebdirectorync/occ upgrade
-sudo --user=www-data php ncwebdirectorync/occ maintenance:mode --off
 ```
 
 Note: Turning Nextcloud into the Maintenance-Mode and back, is not really required. As by the above commands, also the Apache Web-Server gets shutdown ... so being unable to tell the user anything. Let's see it more as praticing the right way, when making serious changes on the Nesxtcloud installation.
@@ -381,27 +262,29 @@ Similar to the way (above) to take over your additionally installed apps, use th
 
 ```console
 cd /tmp
-wget https://download.nextcloud.com/server/releases/nextcloud-30.0.6.tar.bz2
-tar -xf nextcloud-30.0.6.tar.bz2
-cd nextcloud/apps
+wget https://download.nextcloud.com/server/releases/nextcloud-30.0.6.zip
+unzip nextcloud-30.0.6.zip
+cd ncwebdirectorync
+cp config/config.php /tmp/nextcloud/config
+cd apps
 ls --directory * | while read d
 do
-  if [ ! -d "ncwebdirectorync/apps/$d" ]; then
+  if [ ! -d "/tmp/nextcloud/apps/$d" ]; then
     echo Found missing $d. Will take it over into the Nextcloud installation.
-    cp --recursive "$d" "ncwebdirectorync/apps"
+    cp --recursive "$d" "/tmp/nextcloud/apps"
   fi
 done
 cd ../..
-chown --recursive --no-dereference www-data:www-data nextcloud
-find nextcloud/ -type d -exec chmod 750 {} \;
-find nextcloud/ -type f -exec chmod 640 {} \;
-chmod 740 nextcloud/apps/notify_push/bin/x86_64/notify_push
+chown --recursive --no-dereference www-data:www-data /tmp/nextcloud
+find /tmp/nextcloud/ -type d -exec chmod 750 {} \;
+find /tmp/nextcloud/ -type f -exec chmod 640 {} \;
+chmod 740 /tmp/nextcloud/apps/notify_push/bin/x86_64/notify_push
+sudo --user=www-data php ncwebdirectorync/occ maintenance:mode --on
 systemctl stop apache2 php8.2-fpm notify_push coturn nginx ds-converter ds-metrics ds-docservice
 mv ncwebdirectorync ncwebdirectorync.BAK
-mv nextcloud ncwebdirectorync
+mv /tmp/nextcloud ncwebdirectorync
 systemctl start apache2 php8.2-fpm notify_push coturn nginx ds-converter ds-metrics ds-docservice
 sudo --user=www-data php ncwebdirectorync/occ upgrade
-sudo --user=www-data php ncwebdirectorync/occ maintenance:mode --off
 ```
 
 Output when Nextcloud had been upgrade from 29.0.10 to 30.0.4 .

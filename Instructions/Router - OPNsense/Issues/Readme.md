@@ -40,7 +40,7 @@ Boot Removeable Media           [Enabled]
 Virus Warning                   [Disaboled]
 ```
 
-- 🪜 navigate to sub menu "CSM Configuration"
+- ⬆ navigate to sub menu "CSM Configuration"
 - ✔️✏️ change the configuration to the following
 
 ```code
@@ -55,14 +55,14 @@ Launch Video OpROM policy       [UEFI only]
 Other PCI device ROM priority   [UEFI OpROM]
 ```
 
-- 🛝 navigate back to "Boot" menu
+- 🔙 navigate back to "Boot" menu
 - navigate to menu "Save & Exit"
 - ✔️ select option "Exit & Save Changes"
 - boot again into BIOS Setup
 - navigate to menu "Boot"
-- 🪜 navigate to sub menu "CSM Configuration"
+- ⬆ navigate to sub menu "CSM Configuration"
 - ✔️✏️ ~~disable~~ option "Launch CSM"
-- 🛝 navigate back to "Boot" menu
+- 🔙 navigate back to "Boot" menu
 - navigate to menu "Save & Exit"
 - ✔️ select option "Exit & Save Changes"
 - power off the system, once you see the boot screen
@@ -101,7 +101,7 @@ Boot Removeable Media           [Enabled]
 Virus Warning                   [Disaboled]
 ```
 
-- 🪜 navigate to sub menu "CSM Configuration"
+- ⬆ navigate to sub menu "CSM Configuration"
 - ✔️✏️ change the configuration to the following
 
 ```code
@@ -116,6 +116,6 @@ Launch Video OpROM policy       [UEFI only]
 Other PCI device ROM priority   [UEFI OpROM]
 ```
 
-- 🛝 navigate back to "Boot" menu
+- 🔙 navigate back to "Boot" menu
 - navigate to menu "Save & Exit"
 - ✔️ select option "Exit & Save Changes"
