@@ -2428,6 +2428,17 @@ In order to remove **`fwlan3interfacefw`** to the LAN Bridge, the following step
           - ✏️✓ type **`Quad-Port-Bridge LAN0-2`** in "**Description**"
           - ✓🔙 click on "**💾 Save**"
 
+## NTP-Server
+
+In order to make the NTP-Server on the pfSense System available to the LAN, those related interfaces have to be selected.
+
+- ⬆ select menu option "**Services** > **NTP**"
+     - navigate to tab "**Settings**"
+          - focus on section "**NTP Server Configuration**"
+          - ✏️✓ enable **`Enable NTP Server`** of "**Enable**"
+          - ✏️✓ select all **`LAN*`** entries of "**Interface**"
+          - ✓🔙 click on "**💾 Save**"
+
 ## OpenVPN Setup
 
 ### Adjust Dashboard
